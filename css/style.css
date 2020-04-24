@@ -8,21 +8,48 @@
     display: none;
 }
 
-.transparent {
-    opacity: 0;
-}
-
 html {
     font-size: 16px;
     font-family: 'plex-serif';
+    overflow: hidden;
+    scroll-behavior: smooth;
+    scroll-padding-top: 32px;
+    scroll-snap-type: y mandatory;
+}
+body {
+    background-image: url('../img/hush-naidoo.jpg');
+    background-position: center;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+
+/* - - - Header - - - */
+header {
+    background: linear-gradient( rgba(0,212,255,.5) 0%, rgba(71,12,97,.75) 48%, rgba(0,0,0,.9) 100%);
+    color: #fff;
+    text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    font-family: 'plex-sans';
+    padding: 100px;
+}
+h1 {
+    font-size: 64px;
+}
+h2 {
+    font-size: 24px;
 }
 
 
 /* - - - Navigation - - - */
-
+nav {
+    position: sticky;
+    top: 0px;
+}
 .menu {
-    background-color: #000;
+    background-color: rgba(0, 0, 0, .9);
     color: #fff;
+    padding-left: 24px;
     display: flex;
 }
 .menu > li {
@@ -30,6 +57,7 @@ html {
     cursor: pointer;
     position: relative;
     padding: .75rem 2rem;
+    border-radius: 8px;
 }
 .menu li:hover {
     background-color: #fa0;
@@ -37,14 +65,41 @@ html {
     transition: all 0.4s ease;
 }
 .submenu {
-    background-color: #000;
+    background-color: rgba(0, 0, 0, .9);
     color: #fff;
     position: absolute;
     left: 0;
     top: 100%;
+    border-radius: 8px;
 }
 .submenu li {
     display: block;
     padding: .75rem 2rem;
     white-space: nowrap;
+    border-radius: 8px;
+}
+
+
+/* - - - Main - - - */
+main {
+    background: linear-gradient( rgba(0,0,0,.9) 0%, rgba(0,0,0,0) 100%);
+    display: grid;
+    grid-template-columns: 100%;
+    grid-auto-rows: minmax(100vh, auto);
+}
+
+.wrapper {
+    scroll-snap-align: start;
+}
+
+#edit-ext {
+    grid-row: 2 / 3;
+}
+
+#edit-env {
+    grid-row: 3 / 4;
+}
+
+#edit-syn {
+    grid-row: 4 / 5;
 }

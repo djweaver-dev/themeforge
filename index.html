@@ -6,35 +6,62 @@
         <title>Document</title>
     </head>
     <body>
+        <header>
+            <h1>Theme Forge</h1>
+            <h2>Visual Studio Code themes made <emphasis>easy.</emphasis></h2>
+        </header>
         <nav>
             <ul class="menu">
-                <li>File
-                    <ul class="submenu">
-                        <li>Import</li>
-                        <li>Export</li>
-                        <li>Export As...</li>
-                        <li>Exit</li>
+                <li id="menu-file">File
+                    <ul id="submenu-file" class="submenu hidden">
+                        <li id="file-import">Import</li>
+                        <li id="file-export">Export</li>
+                        <li id="file-exportas">Export As...</li>
+                        <li id="file-exit">Exit</li>
                     </ul>
                 </li>
-                <li>Extension</li>
-                <li>Environment</li>
-                <li>Syntax</li>
-                <li>Help
-                    <ul class="submenu">
-                        <li>Quick Start</li>
-                        <li>Documentation</li>
-                        <li>Report Bug</li>
-                        <li>About</li>
+                <li id="menu-extension">Extension</li>
+                <li id="menu-environment">Environment</li>
+                <li id="menu-syntax">Syntax</li>
+                <li id="menu-help">Help
+                    <ul id="submenu-help" class="submenu hidden">
+                        <li id="help-quickstart">Quick Start</li>
+                        <li id="help-documenation">Documentation</li>
+                        <li id="help-reportbug">Report Bug</li>
+                        <li id="help-about">About</li>
                     </ul>
                 </li>
-                <li>Dev
-                    <ul class="submenu">
-                        <li>Dev Tools</li>
-                        <li>Reload</li>
+                <li id="menu-dev">Dev
+                    <ul id="submenu-dev" class="submenu hidden">
+                        <li id="dev-devtools">Dev Tools</li>
+                        <li id="dev-reload">Reload</li>
                     </ul>
                 </li>
             </ul>
         </nav>
+
+        <main>
+            
+            <a class="hidden" id="anchor-ext" href="#edit-ext"></a>
+            <a class="hidden" id="anchor-env" href="#edit-env"></a>
+            <a class="hidden" id="anchor-syn" href="#edit-syn"></a>
+
+            <div class="wrapper" id="edit-ext">
+                <h1>Extension</h1>
+            </div>
+            
+            <div class="wrapper" id="edit-env">
+                <h1>Environment</h1>
+            </div>
+            
+            <div class="wrapper" id="edit-syn">
+                <h1>Syntax</h1>
+            </div>
+
+        </main>
+
+
         <script src="js/renderer.js"></script>
+        <script src="js/events.js"></script>
     </body>
 </html>
