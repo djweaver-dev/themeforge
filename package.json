@@ -1,0 +1,23 @@
+{
+  "name": "themeforge",
+  "version": "1.0.0",
+  "description": "A graphical theme editor for Visual Studio Code",
+  "main": "js/main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/djweaver-dev/themeforge.git"
+  },
+  "author": "Darin Weaver",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/djweaver-dev/themeforge/issues"
+  },
+  "homepage": "https://github.com/djweaver-dev/themeforge#readme",
+  "devDependencies": {
+    "electron": "^8.2.3"
+  }
+}

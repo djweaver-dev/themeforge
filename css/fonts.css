@@ -1,0 +1,76 @@
+
+
+/* - this stylesheet links our custom fonts - */
+
+
+
+/* - - - M O N O T Y P E   F O N T - - - */
+
+@font-face {
+    src: url(../fonts/ibm-plex-mono/IBMPlexMono-Regular.ttf);
+    font-family: 'plex-mono';
+}
+@font-face {
+    src: url(../fonts/ibm-plex-mono/IBMPlexMono-Bold.ttf);
+    font-family: 'plex-mono';
+    font-weight: bold;
+}
+@font-face {
+    src: url(../fonts/ibm-plex-mono/IBMPlexMono-Italic.ttf);
+    font-family: 'plex-mono';
+    font-style: italic;
+}
+@font-face {
+    src: url(../fonts/ibm-plex-mono/IBMPlexMono-BoldItalic.ttf);
+    font-family: 'plex-mono';
+    font-weight: bold;
+    font-style: italic;
+}
+
+
+/* - - - S A N S   F O N T - - - */
+
+@font-face {
+    src: url(../fonts/ibm-plex-sans/IBMPlexSans-Regular.ttf);
+    font-family: 'plex-sans';
+}
+@font-face {
+    src: url(../fonts/ibm-plex-sans/IBMPlexSans-Bold.ttf);
+    font-family: 'plex-sans';
+    font-weight: bold;
+}
+@font-face {
+    src: url(../fonts/ibm-plex-sans/IBMPlexSans-Italic.ttf);
+    font-family: 'plex-sans';
+    font-style: italic;
+}
+@font-face {
+    src: url(../fonts/ibm-plex-sans/IBMPlexSans-BoldItalic.ttf);
+    font-family: 'plex-sans';
+    font-weight: bold;
+    font-style: italic;
+}
+
+
+/* - - - S E R I F   F O N T - - - */
+
+@font-face {
+    src: url(../fonts/ibm-plex-serif/IBMPlexSerif-Regular.ttf);
+    font-family: 'plex-serif';
+}
+@font-face {
+    src: url(../fonts/ibm-plex-serif/IBMPlexSerif-Bold.ttf);
+    font-family: 'plex-serif';
+    font-weight: bold;
+}
+@font-face {
+    src: url(../fonts/ibm-plex-serif/IBMPlexSerif-Italic.ttf);
+    font-family: 'plex-serif';
+    font-style: italic;
+}
+@font-face {
+    src: url(../fonts/ibm-plex-serif/IBMPlexSerif-BoldItalic.ttf);
+    font-family: 'plex-serif';
+    font-weight: bold;
+    font-style: italic;
+}
