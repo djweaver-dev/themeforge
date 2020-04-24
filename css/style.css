@@ -11,3 +11,40 @@
 .transparent {
     opacity: 0;
 }
+
+html {
+    font-size: 16px;
+    font-family: 'plex-serif';
+}
+
+
+/* - - - Navigation - - - */
+
+.menu {
+    background-color: #000;
+    color: #fff;
+    display: flex;
+}
+.menu > li {
+    display: inline;
+    cursor: pointer;
+    position: relative;
+    padding: .75rem 2rem;
+}
+.menu li:hover {
+    background-color: #fa0;
+    color: #000;
+    transition: all 0.4s ease;
+}
+.submenu {
+    background-color: #000;
+    color: #fff;
+    position: absolute;
+    left: 0;
+    top: 100%;
+}
+.submenu li {
+    display: block;
+    padding: .75rem 2rem;
+    white-space: nowrap;
+}
