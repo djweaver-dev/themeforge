@@ -3,17 +3,15 @@
     margin: 0px;
     padding: 0px;
 }
-
 .hidden {
     display: none;
 }
-
 html {
     font-size: 16px;
     font-family: 'plex-serif';
     overflow: hidden;
     scroll-behavior: smooth;
-    scroll-padding-top: 32px;
+    scroll-padding-top: 0px;
     scroll-snap-type: y mandatory;
 }
 body {
@@ -22,10 +20,10 @@ body {
     background-attachment: fixed;
     background-size: cover;
 }
-
 #home {
     scroll-snap-align: start;   /* - snap point for top - */
 }
+
 
 /* - - - Header - - - */
 header {
@@ -46,6 +44,8 @@ h3 {
     font-size: 48px;
     color: #fa0;
     text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
+    margin-top: 10px;
+    margin-bottom: 80px;
 }
 
 
@@ -95,19 +95,74 @@ main {
     grid-template-columns: 100%;
     grid-auto-rows: minmax(100vh, auto);
 }
-
 .wrapper {
     scroll-snap-align: start;
+    padding: 44px;
 }
-
 #edit-ext {
     grid-row: 2 / 3;
 }
-
 #edit-env {
     grid-row: 3 / 4;
 }
-
 #edit-syn {
     grid-row: 4 / 5;
+}
+
+
+/* - - - E N V   E D I T O R - - - */
+.sub-wrapper {
+    text-align: center;
+    margin: auto;
+}
+.env-wrapper {
+    display: inline-block;
+}
+.env-grid {
+    display: grid;
+    grid-template-columns: 60px 120px 600px;
+    grid-template-rows: 28px 24px 320px 160px 28px;
+    background-color: #000;
+    gap: 2px;
+    padding: 1px;
+
+}
+.env {
+    transition: all .4s ease;
+}
+.env:hover {
+    background-color: #fa0;
+    border: 6px solid #fa0;
+    z-index:1;
+}
+
+#env-title {
+    background-color: #bbb;
+    grid-column: 1 / 4;
+    grid-row: 1 / 2;
+}
+#env-activity {
+    background-color: #bbb;
+    grid-column: 1 / 2;
+    grid-row: 2 / 5;
+}
+#env-panel {
+    background-color: #bbb;
+    grid-column: 3 / 4;
+    grid-row: 4 / 5;
+}
+#env-editor {
+    background-color: #bbb;
+    grid-column: 3 / 4;
+    grid-row: 2 / 4;
+}
+#env-sidebar {
+    background-color: #bbb;
+    grid-column: 2 / 3;
+    grid-row: 2 / 5;
+}
+#env-status {
+    background-color:#bbb;
+    grid-column: 1 / 4;
+    grid-row: 5 / 6;
 }

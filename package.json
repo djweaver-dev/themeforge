@@ -1,6 +1,6 @@
 {
   "name": "themeforge",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A graphical theme editor for Visual Studio Code",
   "main": "js/main.js",
   "scripts": {

@@ -5,7 +5,29 @@ const fs = require('fs');
 const path = require('path');
 const menu = require('./js/menu.js');
 
-let data = null;
+//loads default dataset
+let data = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../themeforge/themes/default.json')))
+
+function renderColors(dataSet){
+    // let envElems = document.querySelectorAll('.env');
+    // for(let i = 0; i < envElems.length; i++){
+    //     //do something something
+    // }
+    document.getElementById('env-activity').style.backgroundColor =
+    dataSet.colors['activityBar.background'];
+    document.getElementById('env-sidebar').style.backgroundColor =
+    dataSet.colors['sideBar.background'];
+    document.getElementById('env-editor').style.backgroundColor =
+    dataSet.colors['editor.background'];
+    document.getElementById('env-panel').style.backgroundColor =
+    dataSet.colors['panel.background'];
+    document.getElementById('env-status').style.backgroundColor =
+    dataSet.colors['statusBar.background'];
+}
+
+renderColors(data)
+
+
 
 //this delegates a single click event within html 
 //element to control the entire program
@@ -24,6 +46,7 @@ document.onclick = function(event) {
                 //import loads our theme JSON into data object
                 case 'import':
                     data = JSON.parse(fs.readFileSync(path.resolve(__dirname, command.importPath)));
+                    renderColors(data);
                     console.log(command.importPath + " loaded")
                     break;
                 //export handles Save and Save As
