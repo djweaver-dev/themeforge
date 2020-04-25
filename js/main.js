@@ -11,11 +11,14 @@ function createWindow(){
         }
     })
     win.loadFile('index.html')
-    
-    //Menu.setApplicationMenu(null)
+    Menu.setApplicationMenu(null)
 }
 app.whenReady().then(createWindow)
+
 ipcMain.on('devtools', () => { 
-    console.log('devtools received')
-    win.toggleDevTools() })
+    win.toggleDevTools() 
+})
+ipcMain.on('reload', () => {
+    win.reload();
+})
 ipcMain.on('exit', () => { app.quit() })

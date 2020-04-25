@@ -21,7 +21,7 @@ function control(id, idArr, target) {
                 case 'file':
                     switch(idArr[3]){
                         case 'import':
-                            let importPath = dialog.showOpenDialogSync({properties: ['openFile']});
+                            let importPath = dialog.showOpenDialogSync({properties: ['openFile']}).toString();
                             currentPath = importPath;
                             return ({action:'import', importPath})
                         case 'export':
@@ -69,10 +69,9 @@ function control(id, idArr, target) {
             })
 
         // - - - S U B M E N U   D R A W E R - - - //
+        //This is the submenu drawer logic that opens
+        //the focused submenu while closing the others
         default: {
-
-            //This is the submenu drawer logic it opens
-            //the focused submenu while closing the others
 
             //check for child menu
             let childId, child = null;
@@ -99,6 +98,7 @@ function control(id, idArr, target) {
                 }
             }
         }
+        //return a null action for edge-case clicks
         return({action:null})
     }
 }

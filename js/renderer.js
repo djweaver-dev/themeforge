@@ -2,8 +2,13 @@
 const electron = require('electron');
 const { ipcRenderer } = electron;
 const fs = require('fs');
+const path = require('path');
 const menu = require('./js/menu.js');
 
+let data = null;
+
+//this delegates a single click event within html 
+//element to control the entire program
 document.onclick = function(event) {
     let targetId = event.target.id;
     let target = document.getElementById(targetId);
@@ -16,21 +21,38 @@ document.onclick = function(event) {
 
             //menu command execution
             switch(command.action){
+                //import loads our theme JSON into data object
                 case 'import':
+                    data = JSON.parse(fs.readFileSync(path.resolve(__dirname, command.importPath)));
+                    console.log(command.importPath + " loaded")
                     break;
+                //export handles Save and Save As
                 case 'export':
+                    fs.writeFile(command.exportPath, JSON.stringify(data), (error) => {
+                        console.log(command.exportPath);
+                        if(error) console.log('whoopsie!');
+                    });
                     break;
+                //nav simulates clicks on hidden anchors
                 case 'nav':
                     document.getElementById(command.target)
                     .dispatchEvent(new MouseEvent('click'))
                     break;
+                //sends exit command to main
                 case 'exit':
                     console.log('exit command received')
                     ipcRenderer.send('exit');
                     break;
+                //sends devtools command to main
                 case 'devtools':
                     ipcRenderer.send('devtools');
                     break;
+                //sends refresh command to main
+                case 'reload':
+                    ipcRenderer.send('reload');
+                    break;
+                //any unaccounted for clicks log id 
+                //of element to console
                 default: 
                     console.log(`${command.action} action from id="${targetId}"`)
                     break;
