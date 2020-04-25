@@ -1,9 +1,9 @@
 'use strict'
 const electron = require('electron');
 const { app, BrowserWindow, Menu, ipcMain } = electron;
-
+let win;
 function createWindow(){
-    let win = new BrowserWindow({
+        win = new BrowserWindow({
         width: 900,
         height: 700,
         webPreferences: {
@@ -11,6 +11,11 @@ function createWindow(){
         }
     })
     win.loadFile('index.html')
+    
     //Menu.setApplicationMenu(null)
 }
 app.whenReady().then(createWindow)
+ipcMain.on('devtools', () => { 
+    console.log('devtools received')
+    win.toggleDevTools() })
+ipcMain.on('exit', () => { app.quit() })

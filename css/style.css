@@ -23,6 +23,9 @@ body {
     background-size: cover;
 }
 
+#home {
+    scroll-snap-align: start;   /* - snap point for top - */
+}
 
 /* - - - Header - - - */
 header {
