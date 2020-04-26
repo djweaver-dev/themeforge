@@ -20,6 +20,14 @@ function control(id, idArr, target) {
                 //commands back to the renderer for execution
                 case 'file':
                     switch(idArr[3]){
+                        case 'new':
+                            return ({action: null})
+                        case 'load':
+                            return ({action: null})
+                        case 'save':
+                            return ({action: null})
+                        case 'saveas':
+                            return ({action: null})
                         case 'import':
                             let importPath = dialog.showOpenDialogSync({properties: ['openFile']}).toString();
                             currentPath = importPath;
