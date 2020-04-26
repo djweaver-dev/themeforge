@@ -6,6 +6,8 @@ const path = require('path');
 const menu = require('./js/menu.js');
 const editor = require('./js/editor.js');
 
+const defaultPath = '../themeforge/themes/theme-forge-light/themes/Theme Forge Light-color-theme.json';
+
 //any benefit to using Map() instead of Object()?
 const colorMap = {
     'editor-env-activity' : 'activityBar.background',
@@ -15,21 +17,17 @@ const colorMap = {
     'editor-env-status' : 'statusBar.background'
 }
 
-let dataSet=null;
+let dataSet = {};
 
 //loads dataset
 function importTheme(importPath){
-    let data;
-    if(importPath === 'default'){
-        data = JSON.parse
-        (fs.readFileSync(path.resolve(__dirname,
-            '../themeforge/themes/default.json')));
-    } else {
-        data = JSON.parse
+    let colorData;
+        colorData = JSON.parse
         (fs.readFileSync(path.resolve(__dirname,
             importPath)));
-    }
-    return data;
+    // let extData;
+    //     extData = JSON.parse(fs.readFileSync(path.resolve(__dirname,)))
+    return colorData;
 }
 //sets our theme to UI elements after data has loaded
 async function setTheme(importPath){
@@ -50,7 +48,7 @@ function setColor(key, color){
 }
 
 //sets our initial default theme
-setTheme('default')
+setTheme(defaultPath)
 
 //this delegates a single click event within html 
 //element to control the entire program
