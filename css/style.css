@@ -6,6 +6,9 @@
 .hidden {
     display: none;
 }
+.transparent {
+    opacity: 0;
+}
 html {
     font-size: 16px;
     font-family: 'plex-serif';
@@ -116,6 +119,7 @@ main {
     margin: auto;
 }
 .env-wrapper {
+
     display: inline-block;
 }
 .env-grid {
@@ -127,6 +131,10 @@ main {
     padding: 1px;
 
 }
+#env-picker{
+    opacity:0;
+    display: none;
+}
 .env {
     transition: all .4s ease;
 }
@@ -136,32 +144,32 @@ main {
     z-index:1;
 }
 
-#env-title {
+#editor-env-title {
     background-color: #bbb;
     grid-column: 1 / 4;
     grid-row: 1 / 2;
 }
-#env-activity {
+#editor-env-activity {
     background-color: #bbb;
     grid-column: 1 / 2;
     grid-row: 2 / 5;
 }
-#env-panel {
+#editor-env-panel {
     background-color: #bbb;
     grid-column: 3 / 4;
     grid-row: 4 / 5;
 }
-#env-editor {
+#editor-env-editor {
     background-color: #bbb;
     grid-column: 3 / 4;
     grid-row: 2 / 4;
 }
-#env-sidebar {
+#editor-env-sidebar {
     background-color: #bbb;
     grid-column: 2 / 3;
     grid-row: 2 / 5;
 }
-#env-status {
+#editor-env-status {
     background-color:#bbb;
     grid-column: 1 / 4;
     grid-row: 5 / 6;

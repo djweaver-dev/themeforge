@@ -4,7 +4,18 @@ const { ipcRenderer } = electron;
 const fs = require('fs');
 const path = require('path');
 const menu = require('./js/menu.js');
-//const editor = require('./js/editor.js');
+const editor = require('./js/editor.js');
+
+//any benefit to using Map() instead of Object()?
+const colorMap = {
+    'editor-env-activity' : 'activityBar.background',
+    'editor-env-sidebar' : 'sideBar.background',
+    'editor-env-editor' : 'editor.background',
+    'editor-env-panel' : 'panel.background',
+    'editor-env-status' : 'statusBar.background'
+}
+
+let dataSet=null;
 
 //loads dataset
 function importTheme(importPath){
@@ -20,20 +31,22 @@ function importTheme(importPath){
     }
     return data;
 }
+//sets our theme to UI elements after data has loaded
 async function setTheme(importPath){
-    let colorMap = [
-        { editor: 'env-activity', data: 'activityBar.background' },
-        { editor: 'env-sidebar', data: 'sideBar.background' },
-        { editor: 'env-editor', data: 'editor.background' },
-        { editor: 'env-panel', data: 'panel.background' },
-        { editor: 'env-status', data: 'statusBar.background' }
-    ]
-    let dataSet = await importTheme(importPath);
-    for(let i = 0; i < colorMap.length; i++){
-        document.getElementById
-        (colorMap[i].editor).style.backgroundColor =
-        dataSet.colors[colorMap[i].data];
+    dataSet = await importTheme(importPath);
+    for(let [key, value] of Object.entries(colorMap)){
+        document.getElementById(key)
+                .style.backgroundColor =
+                dataSet.colors[value];
     }
+}
+
+//TODO:expand this to set multiple complimentary
+//colors for each vscode UI element
+function setColor(key, color){
+    console.log(`Changing ${colorMap[key]} from ${dataSet.colors[colorMap[key]]} to ${color}`)
+    dataSet.colors[colorMap[key]] = color;
+    
 }
 
 //sets our initial default theme
@@ -42,15 +55,15 @@ setTheme('default')
 //this delegates a single click event within html 
 //element to control the entire program
 document.onclick = function(event) {
+    let cmd = null;
     let targetId = event.target.id;
     let target = document.getElementById(targetId);
     let idArray = targetId.split('-');
-    console.log(idArray)
 
     switch(idArray[0]){
         case 'menu':
             //menu routing module
-            let cmd = menu.control(targetId, idArray, target);
+            cmd = menu.control(targetId, idArray, target);
 
             //menu command execution
             switch(cmd.action){
@@ -62,7 +75,7 @@ document.onclick = function(event) {
                     break;
                 //export handles Save and Save As
                 case 'export':
-                    fs.writeFile(cmd.exportPath, JSON.stringify(data), (error) => {
+                    fs.writeFile(cmd.exportPath, JSON.stringify(dataSet), (error) => {
                         console.log(cmd.exportPath);
                         if(error) console.log('whoopsie!')
                     })
@@ -92,9 +105,16 @@ document.onclick = function(event) {
                     break;
             }
             break;
-        case 'edit':
-            //modularized function to control editor
-            //let cmd = editor.control(targetId, idArray, target);
+        case 'editor':
+            //editor routing module
+            cmd = editor.control(targetId, idArray, target);
+
+            //editor command execution
+            switch(cmd.action){
+                case 'setColor':
+                    cmd.color.then((value) => setColor(cmd.id, value))
+                    break;
+            }
             break;
     }
 }
