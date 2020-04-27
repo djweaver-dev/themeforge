@@ -1,5 +1,4 @@
 'use strict'
-const fs = require('fs');
 const remote = require('electron').remote 
 const dialog = remote.dialog;
 
@@ -14,6 +13,10 @@ function control(id, idArr, target) {
         //(see case: 'anchor') or are the parent buttons
         //of submenus (see default:)
         case 'subm':
+
+            //hides our submenu on clicking submenu button
+            let hideId = (`${idArr[0]}-${idArr[1]}-${idArr[2]}`);
+            document.getElementById(hideId).classList.toggle('hidden')
             switch(idArr[2]){
 
                 //file submenu returns import, export, or exit
@@ -21,9 +24,11 @@ function control(id, idArr, target) {
                 case 'file':
                     switch(idArr[3]){
                         case 'new':
-                            return ({action: null})
+                            document.querySelector('.dialog').classList.toggle('hidden')
+                            return ({action: 'dialog', target: `${idArr[0]}-dialog-${idArr[3]}`})
                         case 'load':
-                            return ({action: null})
+                            document.querySelector('.dialog').classList.toggle('hidden')
+                            return ({action: 'dialog', target: `${idArr[0]}-dialog-${idArr[3]}`})
                         case 'save':
                             return ({action: null})
                         case 'saveas':
@@ -45,6 +50,7 @@ function control(id, idArr, target) {
                 //help submenu returns create window commands that
                 //pertain to opening help/documentation windows
                 case 'help':
+                    
                     switch(idArr[3]){
                         case 'quickstart':
                             return ({action: 'create'})
@@ -59,6 +65,7 @@ function control(id, idArr, target) {
                 //dev submenu activates development tools and will
                 //not be accessible in production environment  
                 case 'dev':
+                    
                     switch(idArr[3]){
                         case 'devtools':
                             return ({action: 'devtools'})
@@ -75,6 +82,45 @@ function control(id, idArr, target) {
                 action: 'nav',
                 target: idArr[1] + '-' + idArr[2]
             })
+
+        // - - - D I A L O G   R O U T I N G - - - //
+        case 'dialog':
+            switch(idArr[2]){
+                case 'projector':
+                    console.log('hiding dialog')
+                    document.getElementById(id).classList.toggle('hidden')
+                    return {action: null}
+                
+                //This handles our new project dialog
+                case 'new':
+                    let nameText = document.getElementById('menu-dialog-new-name')
+                    let pathText = document.getElementById('menu-dialog-new-path')
+                    switch(idArr[3]){
+                        case 'accept':
+                            if(nameText.value === ''){
+                                alert('Please enter name')
+                                return({action:null})
+                            }
+                            if(pathText.value === ''){
+                                pathText.value = 'default';
+                            } 
+                            document.querySelector('.dialog').classList.toggle('hidden')
+                            return ({ 
+                                action: 'save', 
+                                name: nameText.value,
+                                path: pathText.value
+                            })
+                        case 'cancel':
+                            document.querySelector('.dialog').classList.toggle('hidden')
+                            return ({action: null})
+                        case 'path':
+                            pathText.value = dialog.showOpenDialogSync({
+                                properties: ['openDirectory']
+                            });
+                            return ({action: null})
+                    }
+                return ({action: null})
+            }
 
         // - - - S U B M E N U   D R A W E R - - - //
         //This is the submenu drawer logic that opens

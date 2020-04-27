@@ -26,17 +26,6 @@ body {
 #home {
     scroll-snap-align: start;   /* - snap point for top - */
 }
-
-
-/* - - - Header - - - */
-header {
-    background: linear-gradient( rgba(0,212,255,.5) 0%, rgba(71,12,97,.75) 48%, rgba(0,0,0,.9) 100%);
-    color: #fff;
-    text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
-    text-align: center;
-    font-family: 'plex-sans';
-    padding: 100px;
-}
 h1 {
     font-size: 64px;
 }
@@ -50,12 +39,80 @@ h3 {
     margin-top: 10px;
     margin-bottom: 80px;
 }
+h4 {
+    font-family: 'plex-sans';
+    font-size: 36px;
+    color: #fa0;
+}
+
+
+/* - - - D I A L O G S - - - */
+.dialog {
+    height: 100%;
+    width: 100%;
+    background-color:rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 5;
+    text-align: center;
+}
+.dialog-window {
+    background-color:rgba(60, 60, 60, 0.9);
+    color: #fff;
+    border-radius: 8px;
+    z-index: 6;
+    padding: 44px;
+    opacity: 1;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.dialog-window p {
+    margin: 10px;
+}
+.dialog-window button {
+    background-color: #000;
+    color: #fff;
+    font-family: 'plex-serif';
+    font-size: 16px;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    margin: 12px;
+}
+.dialog-window button:hover {
+    background-color: #fa0;
+    color: #000;
+    transition: all 0.4s ease;
+}
+input[type="text"] {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fa0;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    font-size: 24px;
+}
+
+/* - - - Header - - - */
+header {
+    background: linear-gradient( rgba(0,212,255,.5) 0%, rgba(71,12,97,.75) 48%, rgba(0,0,0,.9) 100%);
+    color: #fff;
+    text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    font-family: 'plex-sans';
+    padding: 100px;
+}
 
 
 /* - - - Navigation - - - */
 nav {
     position: sticky;
     top: 0px;
+    z-index: 2;
 }
 .menu {
     background-color: rgba(0, 0, 0, .9);
@@ -97,6 +154,7 @@ main {
     display: grid;
     grid-template-columns: 100%;
     grid-auto-rows: minmax(100vh, auto);
+    z-index: 0;
 }
 .wrapper {
     scroll-snap-align: start;
@@ -119,7 +177,6 @@ main {
     margin: auto;
 }
 .env-wrapper {
-
     display: inline-block;
 }
 .env-grid {
@@ -129,7 +186,6 @@ main {
     background-color: #000;
     gap: 2px;
     padding: 1px;
-
 }
 #env-picker{
     opacity:0;

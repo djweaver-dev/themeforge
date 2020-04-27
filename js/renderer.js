@@ -16,6 +16,7 @@ const colorMap = {
     'editor-env-panel' : 'panel.background',
     'editor-env-status' : 'statusBar.background'
 }
+const dataMap = {};
 
 let dataSet = {};
 
@@ -29,6 +30,7 @@ function importTheme(importPath){
     //     extData = JSON.parse(fs.readFileSync(path.resolve(__dirname,)))
     return colorData;
 }
+
 //sets our theme to UI elements after data has loaded
 async function setTheme(importPath){
     dataSet = await importTheme(importPath);
@@ -45,6 +47,29 @@ function setColor(key, color){
     console.log(`Changing ${colorMap[key]} from ${dataSet.colors[colorMap[key]]} to ${color}`)
     dataSet.colors[colorMap[key]] = color;
     
+}
+
+function saveNewProject(name, savePath){
+    let dirName = name.split(' ').join('-').toLowerCase();
+    let fileName = name + '-color-theme.json';
+    //TODO: create proper package.json
+    let pkgData = {'my': 'json' };
+    //TODO: create proper readme.md
+    let rmeData = "# README";
+    console.log(name)
+    console.log(dirName)
+    console.log(fileName)
+    console.log(savePath)
+
+    if (savePath === 'default'){
+        savePath = `${process.cwd()}/themes/${dirName}`;
+    } else {
+        savePath += ("/"+dirName);
+    }
+    fs.mkdirSync(savePath+"/themes", {recursive: true})
+    fs.writeFileSync(savePath+"/themes/"+fileName, JSON.stringify(dataSet, null, '\t'))
+    fs.writeFileSync(savePath+"/package.json", JSON.stringify(pkgData))
+    fs.writeFileSync(savePath+"/readme.md", rmeData)
 }
 
 //sets our initial default theme
@@ -65,13 +90,23 @@ document.onclick = function(event) {
 
             //menu command execution
             switch(cmd.action){
+                case 'save':
+                    saveNewProject(cmd.name, cmd.path)
+                    break;
+                //This generates the appropriate dialog module
+                //within our projector div
+                case 'dialog':
+                    let dialogPath = path.resolve(__dirname, 'dialogs', (`${cmd.target}.html`))
+                    document.getElementById('menu-dialog-projector').innerHTML = 
+                    fs.readFileSync(dialogPath);
+                    break;
                 //import loads our theme JSON into data object
                 case 'import':
                     // data = JSON.parse(fs.readFileSync(path.resolve(__dirname, cmd.importPath)));
                     // renderColors(data);
                     setTheme(cmd.importPath)
                     break;
-                //export handles Save and Save As
+                //Export and Export As of JSON
                 case 'export':
                     fs.writeFile(cmd.exportPath, JSON.stringify(dataSet), (error) => {
                         console.log(cmd.exportPath);
