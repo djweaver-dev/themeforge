@@ -6,7 +6,7 @@ const path = require('path');
 const menu = require('./js/menu.js');
 const editor = require('./js/editor.js');
 
-const defaultPath = '../themeforge/themes/theme-forge-light/themes/Theme Forge Light-color-theme.json';
+const defaultPath = '../themeforge/themes/theme-forge-light/';
 
 //any benefit to using Map() instead of Object()?
 const colorMap = {
@@ -18,35 +18,33 @@ const colorMap = {
 }
 const dataMap = {};
 
+let colorSet = {};
 let dataSet = {};
 
 //loads dataset
-function importTheme(importPath){
-    let colorData;
-        colorData = JSON.parse
+function importData(importPath){
+    let data;
+        data = JSON.parse
         (fs.readFileSync(path.resolve(__dirname,
             importPath)));
-    // let extData;
-    //     extData = JSON.parse(fs.readFileSync(path.resolve(__dirname,)))
-    return colorData;
+    return data;
 }
 
 //sets our theme to UI elements after data has loaded
 async function setTheme(importPath){
-    dataSet = await importTheme(importPath);
+    colorSet = await importData(importPath);
     for(let [key, value] of Object.entries(colorMap)){
         document.getElementById(key)
                 .style.backgroundColor =
-                dataSet.colors[value];
+                colorSet.colors[value];
     }
 }
 
 //TODO:expand this to set multiple complimentary
 //colors for each vscode UI element
 function setColor(key, color){
-    console.log(`Changing ${colorMap[key]} from ${dataSet.colors[colorMap[key]]} to ${color}`)
-    dataSet.colors[colorMap[key]] = color;
-    
+    console.log(`Changing ${colorMap[key]} from ${colorSet.colors[colorMap[key]]} to ${color}`)
+    colorSet.colors[colorMap[key]] = color;
 }
 
 function saveNewProject(name, savePath){
@@ -67,13 +65,33 @@ function saveNewProject(name, savePath){
         savePath += ("/"+dirName);
     }
     fs.mkdirSync(savePath+"/themes", {recursive: true})
-    fs.writeFileSync(savePath+"/themes/"+fileName, JSON.stringify(dataSet, null, '\t'))
+    fs.writeFileSync(savePath+"/themes/"+fileName, JSON.stringify(colorSet, null, '\t'))
     fs.writeFileSync(savePath+"/package.json", JSON.stringify(pkgData))
     fs.writeFileSync(savePath+"/readme.md", rmeData)
 }
 
+//TODO: Error Handling for when the JSON contains invalid character
+//try loading "luminoid dark" theme from "~"
+async function loadProject(loadPath){
+    //load JSON
+        console.log("DEFAULT PATH IS: " +loadPath)
+        dataSet = await importData(loadPath + "/package.json")
+
+        //color-theme.json
+        colorSet = await importData(loadPath + dataSet.contributes.themes[0].path.slice(1,dataSet.contributes.themes[0].path.length))
+ //       console.log(colorSet)
+        for(let [key, value] of Object.entries(colorMap)){
+            document.getElementById(key)
+                    .style.backgroundColor =
+                    colorSet.colors[value];
+        }
+    //return({data, color})
+}
+
 //sets our initial default theme
-setTheme(defaultPath)
+//setTheme(defaultPath)
+loadProject(defaultPath)
+
 
 //this delegates a single click event within html 
 //element to control the entire program
@@ -93,6 +111,9 @@ document.onclick = function(event) {
                 case 'save':
                     saveNewProject(cmd.name, cmd.path)
                     break;
+                case 'load':
+                    loadProject(cmd.path)
+                    break;
                 //This generates the appropriate dialog module
                 //within our projector div
                 case 'dialog':
@@ -100,15 +121,15 @@ document.onclick = function(event) {
                     document.getElementById('menu-dialog-projector').innerHTML = 
                     fs.readFileSync(dialogPath);
                     break;
-                //import loads our theme JSON into data object
-                case 'import':
+                //importData loads our theme JSON into data object
+                case 'importData':
                     // data = JSON.parse(fs.readFileSync(path.resolve(__dirname, cmd.importPath)));
                     // renderColors(data);
                     setTheme(cmd.importPath)
                     break;
                 //Export and Export As of JSON
                 case 'export':
-                    fs.writeFile(cmd.exportPath, JSON.stringify(dataSet), (error) => {
+                    fs.writeFile(cmd.exportPath, JSON.stringify(colorSet), (error) => {
                         console.log(cmd.exportPath);
                         if(error) console.log('whoopsie!')
                     })

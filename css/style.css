@@ -170,6 +170,13 @@ main {
     grid-row: 4 / 5;
 }
 
+/* - - - E X T   E D I T O R - - - */
+.ext-wrapper {
+    background-color:rgba(60, 60, 60, 0.9);
+    color: #fff;
+    border-radius: 8px;
+    padding: 44px;
+}
 
 /* - - - E N V   E D I T O R - - - */
 .sub-wrapper {

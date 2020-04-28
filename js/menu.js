@@ -119,6 +119,27 @@ function control(id, idArr, target) {
                             });
                             return ({action: null})
                     }
+                case 'load':
+                    let loadText = document.getElementById('menu-dialog-load-path')
+                    switch(idArr[3]){
+                        case 'accept':
+                            if(loadText.value === '' || loadText.value === 'undefined'){
+                                alert('Please choose theme folder')
+                                return ({action: null})
+                            } 
+                            document.querySelector('.dialog').classList.toggle('hidden')
+                            return ({ 
+                                action: 'load', 
+                                path: loadText.value
+                            })
+                        case 'cancel':
+                            document.querySelector('.dialog').classList.toggle('hidden')
+                            return ({action: null})
+                        case 'path':
+                            loadText.value = dialog.showOpenDialogSync({properties: ['openDirectory']})
+                            if(loadText.value === 'undefined') loadText.value = "";
+                            return ({action: null})
+                    }
                 return ({action: null})
             }
 
