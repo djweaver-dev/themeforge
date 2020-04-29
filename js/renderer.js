@@ -1,10 +1,28 @@
 'use strict'
+const path = require('path');
+const fs = require('fs');
 const electron = require('electron');
 const { ipcRenderer } = electron;
-const fs = require('fs');
-const path = require('path');
 const menu = require('./js/menu.js');
 const editor = require('./js/editor.js');
+
+// - - - H T M L   I N J E C T O R - - - //
+//this loads various html modules that represent
+//more complex elements that would clunk up
+//our index.html.  The html data is injected into
+//parent elements based on the file name which
+//correlates to the id of the parent element
+async function renderHTML(){
+    const directoryPath = path.join(process.cwd(), 'html');
+    const files = fs.readdirSync(directoryPath)
+    console.log(files)
+    files.forEach(file => {
+        let target = file.slice(0, file.indexOf('.'))
+        let htmlData = fs.readFileSync(path.resolve(directoryPath, file))
+        document.getElementById(target).innerHTML = htmlData
+    })
+        console.log(files.length + " modules loaded.")
+}
 
 const defaultPath = '../themeforge/themes/theme-forge-light/';
 
@@ -23,11 +41,10 @@ let dataSet = {};
 
 //loads dataset
 function importData(importPath){
-    let data;
-        data = JSON.parse
-        (fs.readFileSync(path.resolve(__dirname,
-            importPath)));
-    return data;
+    let data = fs.readFileSync(path.resolve(__dirname,
+            importPath));
+    console.log(JSON.parse(data))
+    return (JSON.parse(data));
 }
 
 //sets our theme to UI elements after data has loaded
@@ -74,24 +91,21 @@ function saveNewProject(name, savePath){
 //try loading "luminoid dark" theme from "~"
 async function loadProject(loadPath){
     //load JSON
-        console.log("DEFAULT PATH IS: " +loadPath)
-        dataSet = await importData(loadPath + "/package.json")
+        //console.log("DEFAULT PATH IS: " +loadPath)
+        dataSet = importData(loadPath + "/package.json")
+        colorSet = importData(loadPath + dataSet.contributes.themes[0].path.slice(1,dataSet.contributes.themes[0].path.length))
 
-        //color-theme.json
-        colorSet = await importData(loadPath + dataSet.contributes.themes[0].path.slice(1,dataSet.contributes.themes[0].path.length))
- //       console.log(colorSet)
         for(let [key, value] of Object.entries(colorMap)){
+
+            //BUG!!!!: Occasionally, this DOM 
+            //selector gets assigned to null. WHY?
             document.getElementById(key)
                     .style.backgroundColor =
                     colorSet.colors[value];
         }
-    //return({data, color})
 }
 
-//sets our initial default theme
-//setTheme(defaultPath)
-loadProject(defaultPath)
-
+renderHTML().then(()=> loadProject(defaultPath))
 
 //this delegates a single click event within html 
 //element to control the entire program
@@ -113,6 +127,7 @@ document.onclick = function(event) {
                     break;
                 case 'load':
                     loadProject(cmd.path)
+                    console.log(dataSet)
                     break;
                 //This generates the appropriate dialog module
                 //within our projector div

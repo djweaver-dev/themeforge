@@ -186,7 +186,7 @@ main {
 .env-wrapper {
     display: inline-block;
 }
-.env-grid {
+.editor-env {
     display: grid;
     grid-template-columns: 60px 120px 600px;
     grid-template-rows: 28px 24px 320px 160px 28px;
