@@ -96,6 +96,13 @@ input[type="text"] {
     text-align: center;
     font-size: 24px;
 }
+.input-header{
+        font-family: 'plex-sans';
+        font-size: 24px;
+        color: #fa0;
+        margin: 10px;
+}
+
 
 /* - - - Header - - - */
 header {
@@ -176,6 +183,34 @@ main {
     color: #fff;
     border-radius: 8px;
     padding: 44px;
+    text-align: center;
+    display: inline-block;
+    border: 1px solid #000;
+    box-shadow: 4px 4px 80px rgba(0, 0, 0, 0.5);
+}
+.ext-wrapper h4 {
+    margin: 40px;
+}
+.ext-wrapper input[type="text"] {
+    margin: 10px;
+}
+.ext-wrapper input[type="textarea"] {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fa0;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    font-size: 24px;
+    margin: 10px;
+}
+.ext-content {
+    display: flex;
+}
+.column {
+    width: 50%;
+    display: block;
+    padding: 10px;
 }
 
 /* - - - E N V   E D I T O R - - - */
@@ -185,6 +220,7 @@ main {
 }
 .env-wrapper {
     display: inline-block;
+    box-shadow: 4px 4px 80px rgba(0, 0, 0, 0.5);
 }
 .editor-env {
     display: grid;

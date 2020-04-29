@@ -15,7 +15,6 @@ const editor = require('./js/editor.js');
 async function renderHTML(){
     const directoryPath = path.join(process.cwd(), 'html');
     const files = fs.readdirSync(directoryPath)
-    console.log(files)
     files.forEach(file => {
         let target = file.slice(0, file.indexOf('.'))
         let htmlData = fs.readFileSync(path.resolve(directoryPath, file))
@@ -34,17 +33,23 @@ const colorMap = {
     'editor-env-panel' : 'panel.background',
     'editor-env-status' : 'statusBar.background'
 }
-const dataMap = {};
+const dataMap = {
+    'editor-ext-name': 'displayName',
+    'editor-ext-author': 'publisher',
+    'editor-ext-version': 'version',
+    'editor-ext-repo': 'repository.url',
+    'editor-ext-desc': 'description'
+};
 
 let colorSet = {};
 let dataSet = {};
+let inputTarg;
+let workingDir;
 
 //loads dataset
 function importData(importPath){
-    let data = fs.readFileSync(path.resolve(__dirname,
-            importPath));
-    console.log(JSON.parse(data))
-    return (JSON.parse(data));
+    let data = JSON.parse(fs.readFileSync(path.resolve(__dirname, importPath)));
+    return (data);
 }
 
 //sets our theme to UI elements after data has loaded
@@ -64,45 +69,52 @@ function setColor(key, color){
     colorSet.colors[colorMap[key]] = color;
 }
 
-function saveNewProject(name, savePath){
+function setText(key){
+//    console.log(`Changing ${dataMap[key]} from ${dataSet.colors[dataMap[key]]} to ${document.getElementById(key).value}`)
+    dataSet[dataMap[key]] = document.getElementById(key).value;
+    console.log(dataSet['publisher'])
+}
+
+function saveProject(name, savePath){
     let dirName = name.split(' ').join('-').toLowerCase();
     let fileName = name + '-color-theme.json';
     //TODO: create proper package.json
-    let pkgData = {'my': 'json' };
+    dataSet.name = dirName;
+    dataSet.displayName = name;
+    dataSet.contributes.themes[0].path = savePath+"/themes/"+fileName;
     //TODO: create proper readme.md
     let rmeData = "# README";
-    console.log(name)
-    console.log(dirName)
-    console.log(fileName)
-    console.log(savePath)
-
     if (savePath === 'default'){
         savePath = `${process.cwd()}/themes/${dirName}`;
+        dataSet.contributes.themes[0].path =`./themes/${fileName}`;
     } else {
         savePath += ("/"+dirName);
     }
     fs.mkdirSync(savePath+"/themes", {recursive: true})
     fs.writeFileSync(savePath+"/themes/"+fileName, JSON.stringify(colorSet, null, '\t'))
-    fs.writeFileSync(savePath+"/package.json", JSON.stringify(pkgData))
+    fs.writeFileSync(savePath+"/package.json", JSON.stringify(dataSet, null, '\t'))
     fs.writeFileSync(savePath+"/readme.md", rmeData)
+    workingDir = savePath;
 }
 
 //TODO: Error Handling for when the JSON contains invalid character
 //try loading "luminoid dark" theme from "~"
 async function loadProject(loadPath){
-    //load JSON
-        //console.log("DEFAULT PATH IS: " +loadPath)
+        workingDir = loadPath
         dataSet = importData(loadPath + "/package.json")
-        colorSet = importData(loadPath + dataSet.contributes.themes[0].path.slice(1,dataSet.contributes.themes[0].path.length))
-
+        colorSet = importData(loadPath + dataSet.contributes.themes[0].path.slice(1,
+                                dataSet.contributes.themes[0].path.length))
         for(let [key, value] of Object.entries(colorMap)){
-
-            //BUG!!!!: Occasionally, this DOM 
-            //selector gets assigned to null. WHY?
             document.getElementById(key)
                     .style.backgroundColor =
                     colorSet.colors[value];
         }
+
+        for(let [key, value] of Object.entries(dataMap)){
+            document.getElementById(key).value = dataSet[value];
+        }
+        document.getElementById('editor-ext-path').value = process.cwd() + loadPath;
+
 }
 
 renderHTML().then(()=> loadProject(defaultPath))
@@ -118,16 +130,24 @@ document.onclick = function(event) {
     switch(idArray[0]){
         case 'menu':
             //menu routing module
-            cmd = menu.control(targetId, idArray, target);
+            cmd = menu.control(targetId, idArray, target, inputTarg);
 
             //menu command execution
             switch(cmd.action){
                 case 'save':
-                    saveNewProject(cmd.name, cmd.path)
+                    //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: fix bug where saving saves into nested dirs
+                    if(cmd.path === 'working') cmd.path = workingDir;
+                    if(cmd.name === 'current') cmd.name = dataSet.displayName;
+                    console.log(workingDir)
+                    saveProject(cmd.name, cmd.path)
+                    console.log('project saved!')
                     break;
                 case 'load':
                     loadProject(cmd.path)
-                    console.log(dataSet)
+                    break;
+                case 'setWorkingDir':
+                    workingDir = cmd.path
+                    console.log(workingDir)
                     break;
                 //This generates the appropriate dialog module
                 //within our projector div
@@ -167,22 +187,33 @@ document.onclick = function(event) {
                 case 'reload':
                     ipcRenderer.send('reload')
                     break;
+                case 'setText':
+                    setText(cmd.target)
+                    break;
                 //any unaccounted for clicks log id 
                 //of element to console
                 default: 
-                    console.log(`${cmd.action} action from id="${targetId}"`)
                     break;
             }
             break;
         case 'editor':
             //editor routing module
             cmd = editor.control(targetId, idArray, target);
-
             //editor command execution
             switch(cmd.action){
                 case 'setColor':
                     cmd.color.then((value) => setColor(cmd.id, value))
                     break;
+                case 'dialog':
+                    let dialogPath = path.resolve(__dirname, 'dialogs', (`${cmd.target}.html`))
+                    document.getElementById('menu-dialog-projector').innerHTML = 
+                    fs.readFileSync(dialogPath);
+                    document.getElementById('dialog-input-header').innerText = 
+                    document.getElementById(cmd.label).innerText;
+                    inputTarg = cmd.edit;
+                    break;
+                default:
+                    console.log(targetId)
             }
             break;
     }

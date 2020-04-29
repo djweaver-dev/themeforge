@@ -4,7 +4,7 @@ const dialog = remote.dialog;
 
 let currentPath = '/themes/default.json';
 
-function control(id, idArr, target) {
+function control(id, idArr, target, inputTarg) {
     switch(idArr[1]){
 
         // - - - S U B M E N U   R O U T I N G - - - //
@@ -30,7 +30,8 @@ function control(id, idArr, target) {
                             document.querySelector('.dialog').classList.toggle('hidden')
                             return ({action: 'dialog', target: `${idArr[0]}-dialog-${idArr[3]}`})
                         case 'save':
-                            return ({action: null})
+                            console.log('save clicked')
+                            return ({action: 'save', path: 'working', name: 'current'})
                         case 'saveas':
                             return ({action: null})
                         case 'import':
@@ -117,7 +118,7 @@ function control(id, idArr, target) {
                             pathText.value = dialog.showOpenDialogSync({
                                 properties: ['openDirectory']
                             });
-                            return ({action: null})
+                            return ({action: 'setWorkingDir', path: pathText})
                     }
                 case 'load':
                     let loadText = document.getElementById('menu-dialog-load-path')
@@ -137,7 +138,24 @@ function control(id, idArr, target) {
                             return ({action: null})
                         case 'path':
                             loadText.value = dialog.showOpenDialogSync({properties: ['openDirectory']})
-                            if(loadText.value === 'undefined') loadText.value = "";
+                            if(loadText.value === 'undefined') {
+                                loadText.value = "";
+                                return ({action: null})
+                            } else return ({action: 'setWorkingDir', path: loadText.value})
+                    }
+                case 'input':
+                    let inputText = document.getElementById('menu-dialog-input-text')
+                    switch(idArr[3]){
+                        case 'accept':
+                            if(inputText.value === '' || inputText.value === 'undefined'){
+                                alert('Please enter text.')
+                                return ({action: null})
+                            }
+                            document.getElementById(inputTarg).value = inputText.value;
+                            document.querySelector('.dialog').classList.toggle('hidden')
+                            return ({action: 'setText', target: inputTarg}) 
+                        case 'cancel':
+                            document.querySelector('.dialog').classList.toggle('hidden')
                             return ({action: null})
                     }
                 return ({action: null})
