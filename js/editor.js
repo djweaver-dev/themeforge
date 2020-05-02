@@ -5,7 +5,8 @@ function control(id, idArr, target) {
 
     switch(idArr[1]){
         case 'ext':
-            break;
+            document.querySelector('.dialog').classList.toggle('hidden')
+            return({action: 'dialog', target: 'menu-dialog-input', label: idArr[2]+'-txt', edit: id})
         case 'env':
             //if env editor element is clicked, simulate click of
             //hidden colorPicker, change the environment UI element
@@ -25,7 +26,7 @@ function control(id, idArr, target) {
             })
             return ({id, color, action: 'setColor'})
         case 'syn':
-            break;
+            return({action:null})
     }
 }
 
