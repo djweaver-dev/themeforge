@@ -20,10 +20,10 @@ async function renderHTML(){
         let htmlData = fs.readFileSync(path.resolve(directoryPath, file))
         document.getElementById(target).innerHTML = htmlData
     })
-        console.log(files.length + " modules loaded.")
+    console.log(files.length + " modules loaded.")
 }
 
-const defaultPath = '../themeforge/themes/theme-forge-light/';
+const defaultPath = './themes/theme-forge-light/';
 
 //any benefit to using Map() instead of Object()?
 const colorMap = {
@@ -75,21 +75,21 @@ function setText(key){
     console.log(dataSet['publisher'])
 }
 
-function saveProject(name, savePath){
+async function saveProject(name, savePath){
     let dirName = name.split(' ').join('-').toLowerCase();
     let fileName = name + '-color-theme.json';
     //TODO: create proper package.json
     dataSet.name = dirName;
     dataSet.displayName = name;
-    dataSet.contributes.themes[0].path = savePath+"/themes/"+fileName;
+    dataSet.contributes.themes[0].path = "./themes/"+fileName;
     //TODO: create proper readme.md
     let rmeData = "# README";
-    // if (savePath === 'default'){
-    //     savePath = `${process.cwd()}/themes/${dirName}`;
-    //     dataSet.contributes.themes[0].path =`./themes/${fileName}`;
+    if (savePath === 'default'){
+        savePath = `${process.cwd()}/themes/${dirName}`;
+        dataSet.contributes.themes[0].path =`./themes/${fileName}`;
     // } else {
     //     savePath += ("/"+dirName);
-    // }
+    }
     fs.mkdirSync(savePath+"/themes", {recursive: true})
     fs.writeFileSync(savePath+"/themes/"+fileName, JSON.stringify(colorSet, null, '\t'))
     fs.writeFileSync(savePath+"/package.json", JSON.stringify(dataSet, null, '\t'))
@@ -137,19 +137,15 @@ document.onclick = function(event) {
             //menu command execution
             switch(cmd.action){
                 case 'save':
-                    //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: fix bug where saving saves into nested dirs
                     if(cmd.path === 'working') cmd.path = workingDir;
                     if(cmd.name === 'current') cmd.name = dataSet.displayName;
-                    console.log(workingDir)
-                    saveProject(cmd.name, cmd.path)
-                    console.log('project saved!')
+                    saveProject(cmd.name, cmd.path).then(()=>loadProject(workingDir))
                     break;
                 case 'load':
                     loadProject(cmd.path)
                     break;
                 case 'setWorkingDir':
-                    workingDir = cmd.path
-                    console.log(workingDir)
+                    workingDir = cmd.path;
                     break;
                 //This generates the appropriate dialog module
                 //within our projector div

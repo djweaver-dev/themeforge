@@ -33,7 +33,8 @@ function control(id, idArr, target, inputTarg) {
                             console.log('save clicked')
                             return ({action: 'save', path: 'working', name: 'current'})
                         case 'saveas':
-                            return ({action: null})
+                            document.querySelector('.dialog').classList.toggle('hidden')
+                            return ({action: 'dialog', target: `${idArr[0]}-dialog-${idArr[3]}`})
                         case 'import':
                             let importPath = dialog.showOpenDialogSync({properties: ['openFile']}).toString();
                             currentPath = importPath;
@@ -142,6 +143,33 @@ function control(id, idArr, target, inputTarg) {
                                 loadText.value = "";
                                 return ({action: null})
                             } else return ({action: 'setWorkingDir', path: loadText.value})
+                    }
+                    case 'saveas':
+                    let saveasNameText = document.getElementById('menu-dialog-saveas-name')
+                    let saveasPathText = document.getElementById('menu-dialog-saveas-path')
+                    switch(idArr[3]){
+                        case 'accept':
+                            if(saveasNameText.value === ''){
+                                alert('Please enter name')
+                                return({action:null})
+                            }
+                            if(saveasPathText.value === ''){
+                                saveasPathText.value = 'default';
+                            } 
+                            document.querySelector('.dialog').classList.toggle('hidden')
+                            return ({ 
+                                action: 'save', 
+                                name: saveasNameText.value,
+                                path: saveasPathText.value
+                            })
+                        case 'cancel':
+                            document.querySelector('.dialog').classList.toggle('hidden')
+                            return ({action: null})
+                        case 'path':
+                            saveasPathText.value = dialog.showOpenDialogSync({
+                                properties: ['openDirectory']
+                            });
+                            return ({action: 'setWorkingDir', path: saveasPathText})
                     }
                 case 'input':
                     let inputText = document.getElementById('menu-dialog-input-text')
