@@ -84,23 +84,25 @@ function saveProject(name, savePath){
     dataSet.contributes.themes[0].path = savePath+"/themes/"+fileName;
     //TODO: create proper readme.md
     let rmeData = "# README";
-    if (savePath === 'default'){
-        savePath = `${process.cwd()}/themes/${dirName}`;
-        dataSet.contributes.themes[0].path =`./themes/${fileName}`;
-    } else {
-        savePath += ("/"+dirName);
-    }
+    // if (savePath === 'default'){
+    //     savePath = `${process.cwd()}/themes/${dirName}`;
+    //     dataSet.contributes.themes[0].path =`./themes/${fileName}`;
+    // } else {
+    //     savePath += ("/"+dirName);
+    // }
     fs.mkdirSync(savePath+"/themes", {recursive: true})
     fs.writeFileSync(savePath+"/themes/"+fileName, JSON.stringify(colorSet, null, '\t'))
     fs.writeFileSync(savePath+"/package.json", JSON.stringify(dataSet, null, '\t'))
     fs.writeFileSync(savePath+"/readme.md", rmeData)
     workingDir = savePath;
+    console.log("SAVE DIRECTORY: " + workingDir)
 }
 
 //TODO: Error Handling for when the JSON contains invalid character
 //try loading "luminoid dark" theme from "~"
 async function loadProject(loadPath){
-        workingDir = loadPath
+        workingDir = loadPath;
+        console.log('WORKING DIR: '+ workingDir)
         dataSet = importData(loadPath + "/package.json")
         colorSet = importData(loadPath + dataSet.contributes.themes[0].path.slice(1,
                                 dataSet.contributes.themes[0].path.length))
