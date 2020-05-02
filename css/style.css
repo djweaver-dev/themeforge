@@ -285,9 +285,23 @@ main {
 .syn-wrapper h4 {
     margin: 40px;
 }
+.syn-text {
+    display: inline-block;
+    padding: 10px;
+    cursor: pointer;
+    margin: auto;
+    transition: all .4s ease;
+}
+
+.syn-text:hover {
+    border: 6px solid #fa0;
+    border-radius: 8px;
+}
 
 #syn-content {
     background-color: #bbb;
+    width: 600px;
+    height: 400px;
     padding: 44px;
     border-radius: 8px;
     font-family: 'plex-mono';
