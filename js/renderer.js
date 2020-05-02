@@ -23,7 +23,7 @@ async function renderHTML(){
     console.log(files.length + " modules loaded.")
 }
 
-const defaultPath = './themes/theme-forge-light/';
+const defaultPath = './themes/theme-forge-default/';
 
 //any benefit to using Map() instead of Object()?
 const colorMap = {
@@ -82,6 +82,7 @@ async function saveProject(name, savePath){
     dataSet.name = dirName;
     dataSet.displayName = name;
     dataSet.contributes.themes[0].path = "./themes/"+fileName;
+    dataSet.contributes.themes[0].label = name;
     //TODO: create proper readme.md
     let rmeData = "# README";
     if (savePath === 'default'){
@@ -111,7 +112,6 @@ async function loadProject(loadPath){
                     .style.backgroundColor =
                     colorSet.colors[value];
         }
-
         for(let [key, value] of Object.entries(dataMap)){
             document.getElementById(key).value = dataSet[value];
         }
@@ -119,7 +119,7 @@ async function loadProject(loadPath){
 
 }
 
-renderHTML().then(()=> loadProject(defaultPath))
+renderHTML().then(()=>loadProject(defaultPath))
 
 //this delegates a single click event within html 
 //element to control the entire program
@@ -174,7 +174,6 @@ document.onclick = function(event) {
                     break;
                 //sends exit cmd to main
                 case 'exit':
-                    console.log('exit command received')
                     ipcRenderer.send('exit')
                     break;
                 //sends devtools cmd to main
