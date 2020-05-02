@@ -286,6 +286,10 @@ main {
     margin: 40px;
 }
 
-.syn-content {
+#syn-content {
     background-color: #bbb;
+    padding: 44px;
+    border-radius: 8px;
+    font-family: 'plex-mono';
+    font-size: 18px;
 }

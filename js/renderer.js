@@ -30,6 +30,7 @@ const colorMap = {
     'editor-env-activity' : 'activityBar.background',
     'editor-env-sidebar' : 'sideBar.background',
     'editor-env-editor' : 'editor.background',
+    'syn-content' : 'editor.background',
     'editor-env-panel' : 'panel.background',
     'editor-env-status' : 'statusBar.background'
 }
@@ -37,9 +38,15 @@ const dataMap = {
     'editor-ext-name': 'displayName',
     'editor-ext-author': 'publisher',
     'editor-ext-version': 'version',
-    'editor-ext-repo': 'repository.url',
+    'editor-ext-repo': 'repository',
     'editor-ext-desc': 'description'
-};
+}
+const tokenMap = {
+    'syn-comment' : 'comment',
+    'syn-operator' : 'keyword.operator',
+    'syn-storage' : 'storage',
+    'syn-function' : 'entity.name.function'
+}
 
 let colorSet = {};
 let dataSet = {};
@@ -107,6 +114,7 @@ async function loadProject(loadPath){
         dataSet = importData(loadPath + "/package.json")
         colorSet = importData(loadPath + dataSet.contributes.themes[0].path.slice(1,
                                 dataSet.contributes.themes[0].path.length))
+        console.log(colorSet.tokenColors[0])
         for(let [key, value] of Object.entries(colorMap)){
             document.getElementById(key)
                     .style.backgroundColor =
@@ -114,9 +122,27 @@ async function loadProject(loadPath){
         }
         for(let [key, value] of Object.entries(dataMap)){
             document.getElementById(key).value = dataSet[value];
+            if (key === 'editor-ext-repo')
+            document.getElementById(key).value = dataSet[value].url;
         }
-        document.getElementById('editor-ext-path').value = process.cwd() + loadPath;
+        for(let [key, value] of Object.entries(tokenMap)) {
+            for(let i = 0; i < colorSet.tokenColors.length; i++) {
+              if(colorSet.tokenColors[i].scope.includes(value)){
+                document.getElementById(key).style.color = colorSet.tokenColors[i].settings.foreground;
+                if(colorSet.tokenColors[i].settings.hasOwnProperty('fontStyle')){
+                    if(colorSet.tokenColors[i].settings.fontStyle.includes('bold')){
+                        document.getElementById(key).style.fontWeight = 'bold';
 
+                    }
+                    if(colorSet.tokenColors[i].settings.fontStyle.includes('italic')){
+                        document.getElementById(key).style.fontStyle = 'italic';
+                        console.log(colorSet.tokenColors[i].name)
+                    }
+                }
+              }
+            }
+          }
+        document.getElementById('editor-ext-path').value = process.cwd() + loadPath;
 }
 
 renderHTML().then(()=>loadProject(defaultPath))
