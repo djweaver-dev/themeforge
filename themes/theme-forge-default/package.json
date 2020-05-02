@@ -1,0 +1,28 @@
+{
+	"name": "theme-forge-default",
+	"displayName": "Theme Forge Default",
+	"description": "Default theme for Theme Forge",
+	"version": "0.0.1",
+	"publisher": "djweaver",
+	"engines": {
+		"vscode": "^1.44.0"
+	},
+	"categories": [
+		"Themes"
+	],
+	"icon": "icon.png",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/username/repository.git"
+	},
+	"contributes": {
+		"themes": [
+			{
+				"label": "Theme Forge Default",
+				"uiTheme": "vs",
+				"path": "./themes/Theme Forge Default-color-theme.json"
+			}
+		]
+	},
+	"repository.url": "none"
+}
